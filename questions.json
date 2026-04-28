@@ -1,0 +1,222 @@
+[
+    {
+        "id": "1",
+        "text": "Which Python library is commonly used for browser automation?",
+        "options": {
+            "a": "Pandas",
+            "b": "Playwright",
+            "c": "Requests",
+            "d": "Math"
+        },
+        "answer": "b"
+    },
+    {
+        "id": "2",
+        "text": "In n8n, what is the purpose of a 'Webhook' node?",
+        "options": {
+            "a": "To send an email",
+            "b": "To trigger a workflow via an external URL",
+            "c": "To store data in a database",
+            "d": "To write JavaScript code"
+        },
+        "answer": "b"
+    },
+    {
+        "id": "3",
+        "text": "What does 'VPS' stand for?",
+        "options": {
+            "a": "Virtual Private Server",
+            "b": "Visual Power System",
+            "c": "Variable Protocol Storage",
+            "d": "Virtual Public Serial"
+        },
+        "answer": "a"
+    },
+    {
+        "id": "4",
+        "text": "Which of these is a popular 'Vector Database' used for AI applications?",
+        "options": {
+            "a": "Pinecone",
+            "b": "SQLite",
+            "c": "Excel",
+            "d": "Word"
+        },
+        "answer": "a"
+    },
+    {
+        "id": "5",
+        "text": "What is the function of a 'Join' in SQL?",
+        "options": {
+            "a": "To delete a table",
+            "b": "To combine rows from two or more tables",
+            "c": "To create a new database",
+            "d": "To encrypt data"
+        },
+        "answer": "b"
+    },
+    {
+        "id": "6",
+        "text": "Which framework is used to build custom AI agents with memory and tools?",
+        "options": {
+            "a": "Flask",
+            "b": "LangGraph",
+            "c": "Tailwind",
+            "d": "Bootstrap"
+        },
+        "answer": "b"
+    },
+    {
+        "id": "7",
+        "text": "What is the standard port for HTTPS?",
+        "options": {
+            "a": "80",
+            "b": "21",
+            "c": "443",
+            "d": "22"
+        },
+        "answer": "c"
+    },
+    {
+        "id": "8",
+        "text": "In Python, which of these is used to handle exceptions?",
+        "options": {
+            "a": "if...else",
+            "b": "try...except",
+            "c": "while...do",
+            "d": "for...in"
+        },
+        "answer": "b"
+    },
+    {
+        "id": "9",
+        "text": "What does 'JSON' stand for?",
+        "options": {
+            "a": "JavaScript Object Notation",
+            "b": "Java Standard Output Network",
+            "c": "Joint System Online Node",
+            "d": "Just Simple Object Name"
+        },
+        "answer": "a"
+    },
+    {
+        "id": "10",
+        "text": "Which tool is used for managing 'Environment Variables' in a Python project?",
+        "options": {
+            "a": "pip",
+            "b": "python-dotenv",
+            "c": "flask-cors",
+            "d": "numpy"
+        },
+        "answer": "b"
+    },
+    {
+        "id": "11",
+        "text": "What is the primary role of an 'Evolution API' in automation?",
+        "options": {
+            "a": "Generating Images",
+            "b": "WhatsApp Automation",
+            "c": "Stock Market Analysis",
+            "d": "Video Compression"
+        },
+        "answer": "b"
+    },
+    {
+        "id": "12",
+        "text": "Which cloud provider offers 'EC2' instances?",
+        "options": {
+            "a": "Google Cloud",
+            "b": "AWS (Amazon Web Services)",
+            "c": "Microsoft Azure",
+            "d": "DigitalOcean"
+        },
+        "answer": "b"
+    },
+    {
+        "id": "13",
+        "text": "In a React application, what is 'State'?",
+        "options": {
+            "a": "A permanent database",
+            "b": "An internal object that stores component data",
+            "c": "A type of CSS file",
+            "d": "The physical location of the server"
+        },
+        "answer": "b"
+    },
+    {
+        "id": "14",
+        "text": "Which command is used to install a package in Python using pip?",
+        "options": {
+            "a": "pip get [package]",
+            "b": "pip install [package]",
+            "c": "pip download [package]",
+            "d": "pip add [package]"
+        },
+        "answer": "b"
+    },
+    {
+        "id": "15",
+        "text": "What is 'Prompt Engineering'?",
+        "options": {
+            "a": "Designing hardware",
+            "b": "Optimizing inputs for AI models",
+            "c": "Writing SQL queries",
+            "d": "Building network cables"
+        },
+        "answer": "b"
+    },
+    {
+        "id": "16",
+        "text": "Which of these is a Python web framework?",
+        "options": {
+            "a": "Django",
+            "b": "Laravel",
+            "c": "Angular",
+            "d": "Express"
+        },
+        "answer": "a"
+    },
+    {
+        "id": "17",
+        "text": "What does 'RAM' stand for?",
+        "options": {
+            "a": "Read Access Memory",
+            "b": "Random Access Memory",
+            "c": "Run Active Module",
+            "d": "Remote Access Management"
+        },
+        "answer": "b"
+    },
+    {
+        "id": "18",
+        "text": "Which file is used to define dependencies in a Node.js project?",
+        "options": {
+            "a": "config.xml",
+            "b": "package.json",
+            "c": "main.py",
+            "d": "index.html"
+        },
+        "answer": "b"
+    },
+    {
+        "id": "19",
+        "text": "What is the purpose of 'Docker Compose'?",
+        "options": {
+            "a": "To write code faster",
+            "b": "To run multi-container applications",
+            "c": "To design UI/UX",
+            "d": "To check for spelling errors"
+        },
+        "answer": "b"
+    },
+    {
+        "id": "20",
+        "text": "Which AI model is developed by Google?",
+        "options": {
+            "a": "GPT-4o",
+            "b": "Claude",
+            "c": "Gemini",
+            "d": "Llama 3"
+        },
+        "answer": "c"
+    }
+]

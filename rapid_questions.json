@@ -1,0 +1,222 @@
+[
+    {
+        "id": "1",
+        "text": "What is the primary purpose of HTML as described in the basics?",
+        "options": {
+            "a": "To style the webpage",
+            "b": "To structure content on the internet",
+            "c": "To add logic to the site",
+            "d": "To manage databases"
+        },
+        "answer": "b"
+    },
+    {
+        "id": "2",
+        "text": "Which part of the 'Tag Sandwich' is only displayed on the screen?",
+        "options": {
+            "a": "Opening tag",
+            "b": "Closing tag",
+            "c": "Visible content between tags",
+            "d": "The brackets"
+        },
+        "answer": "c"
+    },
+    {
+        "id": "3",
+        "text": "How should HTML markers always be written according to the notes?",
+        "options": {
+            "a": "In curly braces {}",
+            "b": "In markers form using &lt; &gt;",
+            "c": "In square brackets []",
+            "d": "Using quotes \"\""
+        },
+        "answer": "b"
+    },
+    {
+        "id": "4",
+        "text": "What does the &lt;div&gt; tag function as?",
+        "options": {
+            "a": "A heading",
+            "b": "A paragraph",
+            "c": "A container",
+            "d": "A clickable link"
+        },
+        "answer": "c"
+    },
+    {
+        "id": "5",
+        "text": "Which tag is specifically used for text blocks called paragraphs?",
+        "options": {
+            "a": "&lt;h1&gt;",
+            "b": "&lt;div&gt;",
+            "c": "&lt;p&gt;",
+            "d": "&lt;img&gt;"
+        },
+        "answer": "c"
+    },
+    {
+        "id": "6",
+        "text": "What is the 'end tag' for a paragraph element?",
+        "options": {
+            "a": "&lt;p&gt;",
+            "b": "&lt;/p&gt;",
+            "c": "&lt;close p&gt;",
+            "d": "&lt;\\p&gt;"
+        },
+        "answer": "b"
+    },
+    {
+        "id": "7",
+        "text": "To add a clickable link to Google or YouTube, which tag do you use?",
+        "options": {
+            "a": "&lt;img&gt;",
+            "b": "&lt;div&gt;",
+            "c": "&lt;a&gt;",
+            "d": "&lt;h1&gt;"
+        },
+        "answer": "c"
+    },
+    {
+        "id": "8",
+        "text": "Which tag is used to insert an image if you want to add a profile photo?",
+        "options": {
+            "a": "&lt;pic&gt;",
+            "b": "&lt;img&gt;",
+            "c": "&lt;src&gt;",
+            "d": "&lt;image&gt;"
+        },
+        "answer": "b"
+    },
+    {
+        "id": "9",
+        "text": "In a form, which element is used to wrap all input fields?",
+        "options": {
+            "a": "&lt;input&gt;",
+            "b": "&lt;br&gt;",
+            "c": "&lt;form&gt;",
+            "d": "&lt;div&gt;"
+        },
+        "answer": "c"
+    },
+    {
+        "id": "10",
+        "text": "What is the purpose of the &lt;br&gt; tag in a form layout?",
+        "options": {
+            "a": "To bold the text",
+            "b": "To go to the next line",
+            "c": "To reset the form",
+            "d": "To add a checkbox"
+        },
+        "answer": "b"
+    },
+    {
+        "id": "11",
+        "text": "If you want a user to enter their name, which input type is best?",
+        "options": {
+            "a": "type='password'",
+            "b": "type='date'",
+            "c": "type='text'",
+            "d": "type='checkbox'"
+        },
+        "answer": "c"
+    },
+    {
+        "id": "12",
+        "text": "Which input type allows the user to select a date and time like '03/18/2026 10:22 AM'?",
+        "options": {
+            "a": "type='date'",
+            "b": "type='time'",
+            "c": "type='datetime-local'",
+            "d": "type='text'"
+        },
+        "answer": "c"
+    },
+    {
+        "id": "13",
+        "text": "What does a 'Checkbox' allow a user to do?",
+        "options": {
+            "a": "Type a long story",
+            "b": "Tick an option",
+            "c": "Upload a file",
+            "d": "Submit the form"
+        },
+        "answer": "b"
+    },
+    {
+        "id": "14",
+        "text": "How do you display a password field where the characters are hidden?",
+        "options": {
+            "a": "type='secret'",
+            "b": "type='hidden'",
+            "c": "type='password'",
+            "d": "type='dots'"
+        },
+        "answer": "c"
+    },
+    {
+        "id": "15",
+        "text": "[HARD] What is the attribute used to show 'tera nama kya hai' inside an empty text box?",
+        "options": {
+            "a": "value",
+            "b": "placeholder",
+            "c": "name",
+            "d": "id"
+        },
+        "answer": "b"
+    },
+    {
+        "id": "16",
+        "text": "[HARD] Which of these is a correct example of a Radio button for 'Male'?",
+        "options": {
+            "a": "&lt;input type='radio'&gt;Male",
+            "b": "&lt;radio&gt;Male&lt;/radio&gt;",
+            "c": "&lt;input radio='Male'&gt;",
+            "d": "&lt;check type='radio'&gt;Male"
+        },
+        "answer": "a"
+    },
+    {
+        "id": "17",
+        "text": "[HARD] Based on the profile page assignment, which tags are required for 'About You'?",
+        "options": {
+            "a": "&lt;h1&gt;",
+            "b": "&lt;p&gt;",
+            "c": "&lt;img&gt;",
+            "d": "&lt;a&gt;"
+        },
+        "answer": "b"
+    },
+    {
+        "id": "18",
+        "text": "[HARD] In the 'Anatomy of a Tag' diagram, what are the two mandatory components surrounding visible content?",
+        "options": {
+            "a": "Opening tag and visible content",
+            "b": "Visible content and closing tag",
+            "c": "Opening tag and closing tag",
+            "d": "Heading and Paragraph"
+        },
+        "answer": "c"
+    },
+    {
+        "id": "19",
+        "text": "[HARD] When creating a form with 'Enter Your Name' and 'Enter Your Class', where do these labels go?",
+        "options": {
+            "a": "Inside the &lt;input&gt; tag brackets",
+            "b": "Outside the &lt;form&gt; tag only",
+            "c": "Inside the &lt;form&gt; tags, usually before the &lt;input&gt; tags",
+            "d": "Inside the closing &lt;/input&gt; tag"
+        },
+        "answer": "c"
+    },
+    {
+        "id": "20",
+        "text": "Which file extension is shown in the PDF for a basic HTML file?",
+        "options": {
+            "a": ".txt",
+            "b": ".html",
+            "c": ".pdf",
+            "d": ".png"
+        },
+        "answer": "b"
+    }
+]

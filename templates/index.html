@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prince Learning Hub</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header Section -->
+        <header class="main-header glass">
+            <div class="logo-container">
+                <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Prince Tech Logo" class="brand-logo floating-logo">
+                <div class="title-container">
+                    <h2 class="super-title">Prince Learning Hub</h2>
+                    <h1 class="main-title">Coder Of the Week</h1>
+                </div>
+            </div>
+        </header>
+
+        <main class="home-layout">
+            <!-- Action Card 1: Start Test -->
+            <div class="action-card glass" onclick="window.location.href='/test'">
+                <div class="card-content">
+                    <div class="icon-wrapper blue-glow bounce-hover">
+                        📝
+                    </div>
+                    <h2>Standard Test</h2>
+                    <button class="primary-btn mt-auto glow-on-hover">Take a Test</button>
+                </div>
+            </div>
+
+            <!-- Action Card: Rapid Round -->
+            <div class="action-card glass" onclick="window.location.href='/rapid-test'">
+                <div class="card-content">
+                    <div class="icon-wrapper bounce-hover" style="box-shadow: 0 0 20px rgba(239, 68, 68, 0.4); text-shadow: 0 0 10px rgba(239, 68, 68, 0.6); color: #f87171;">
+                        ⏱️
+                    </div>
+                    <h2 style="color: #f87171;">Rapid Round</h2>
+                    <p style="color: #94a3b8; font-size: 0.9rem; margin-bottom: 1rem;">2 Min • 20 Questions</p>
+                    <button class="primary-btn mt-auto glow-on-hover" style="background: linear-gradient(135deg, #ef4444, #dc2626); box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);">Start Rapid Round</button>
+                </div>
+            </div>
+
+            <!-- Action Card 2: Top Performers -->
+            <div class="action-card glass" onclick="window.location.href='/leaderboard'">
+                <div class="card-content">
+                    <div class="icon-wrapper gold-glow bounce-hover">
+                        🏆
+                    </div>
+                    <h2>Top Performers</h2>
+                    <button class="secondary-btn mt-auto glow-on-hover">View Leaderboard</button>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

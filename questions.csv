@@ -1,0 +1,6 @@
+id,question,option_a,option_b,option_c,option_d,correct_answer
+1,What is the capital of India?,Mumbai,New Delhi,Kolkata,Chennai,b
+2,Which programming language is used for Flask?,Java,Python,C++,Ruby,b
+3,Who is known as the father of computers?,Charles Babbage,Alan Turing,Bill Gates,Steve Jobs,a
+4,What does HTTP stand for?,HyperText Transfer Protocol,HighText Transfer Protocol,Hyper Technical Transfer Protocol,HyperText Transmission Protocol,a
+5,Which data structure uses LIFO (Last In First Out)?,Queue,Stack,Array,Tree,b

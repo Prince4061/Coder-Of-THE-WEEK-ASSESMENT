@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leaderboard - Prince Learning Hub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        .leaderboard-wrapper { max-width: 800px; margin: 0 auto; margin-top:2rem;}
+        .back-btn { margin-bottom: 2rem; display: inline-block; cursor: pointer; color: #94a3b8; text-decoration: none; font-weight: 500; transition: color 0.2s;}
+        .back-btn:hover { color: white; }
+    </style>
+</head>
+<body>
+    <div class="app-container leaderboard-wrapper">
+        <a href="/" class="back-btn">← Back to Home</a>
+        
+        <header style="text-align:center; margin-bottom: 2rem;">
+            <div style="display:flex; justify-content:center; align-items:center; gap:1rem; margin-bottom:1rem;">
+                <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo" style="height:50px;">
+                <h1 style="font-size:2.5rem; background: linear-gradient(135deg, #fff 0%, #cbd5e1 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Global Leaderboard</h1>
+            </div>
+            <p style="color:#94a3b8; font-size:1.1rem;">Top performers of Prince Learning Hub</p>
+        </header>
+
+        <section class="leaderboard-section glass">
+            <div class="table-container">
+                <table class="leaderboard-table">
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>Student Name</th>
+                            <th class="score-col">Score</th>
+                        </tr>
+                    </thead>
+                    <tbody id="leaderboardBody">
+                        <tr><td colspan="3" style="text-align:center; padding:3rem; color:#94a3b8;">Loading leaderboard...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const tbody = document.getElementById('leaderboardBody');
+            try {
+                const res = await fetch('/api/leaderboard');
+                const users = await res.json();
+                
+                tbody.innerHTML = '';
+                if(users.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="3" style="text-align:center; padding:3rem; color:#94a3b8;">No tests have been taken yet. Be the first!</td></tr>';
+                    return;
+                }
+
+                users.forEach((user, index) => {
+                    const rank = index + 1;
+                    let badgeClass = 'regular';
+                    if(rank === 1) badgeClass = 'gold';
+                    else if(rank === 2) badgeClass = 'silver';
+                    else if(rank === 3) badgeClass = 'bronze';
+
+                    const tr = document.createElement('tr');
+                    tr.className = 'rank-row';
+                    tr.innerHTML = `
+                        <td><div class="rank-badge ${badgeClass}">${rank}</div></td>
+                        <td class="student-name">${user.Name}</td>
+                        <td class="score-col"><span class="score-pill">${user.Score} / 20</span></td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            } catch(e) {
+                tbody.innerHTML = '<tr><td colspan="3" style="text-align:center; padding:3rem; color:#f87171;">Failed to load leaderboard data. Problem connecting to server.</td></tr>';
+            }
+        });
+    </script>
+</body>
+</html>

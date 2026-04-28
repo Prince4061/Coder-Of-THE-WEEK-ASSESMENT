@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Prince Learning Hub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        .admin-container {
+            max-width: 800px;
+            margin: 0 auto;
+            margin-bottom: 4rem;
+            margin-top: 2rem;
+        }
+        .upload-area {
+            border: 2px dashed rgba(255,255,255,0.2);
+            border-radius: 1rem;
+            padding: 3rem;
+            text-align: center;
+            background: rgba(0,0,0,0.2);
+            transition: all 0.3s;
+            position: relative;
+        }
+        .upload-area:hover {
+            border-color: #3b82f6;
+            background: rgba(59, 130, 246, 0.05);
+        }
+        .file-input {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+        .instructions-list {
+            text-align: left;
+            margin-top: 1.5rem;
+            color: #94a3b8;
+            font-size: 0.95rem;
+            padding-left: 1.5rem;
+        }
+        .instructions-list li {
+            margin-bottom: 0.5rem;
+            line-height: 1.5;
+        }
+        .action-bars {
+            display: flex;
+            justify-content: space-between;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        pre {
+            background: rgba(0,0,0,0.5);
+            padding: 1rem;
+            border-radius: 0.5rem;
+            border: 1px solid rgba(255,255,255,0.1);
+            color: #34d399;
+            font-size: 0.85rem;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container admin-container">
+        <header style="text-align:center; margin-bottom: 3rem;">
+            <div style="display:flex; justify-content:center; align-items:center; gap:1rem; margin-bottom:1rem;">
+                <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo" style="height:50px;">
+                <h1 style="font-size:2.5rem; font-weight:700;">Admin Dashboard</h1>
+            </div>
+            <p style="color:#94a3b8;">Manage your assessment questions dynamically via JSON Format</p>
+        </header>
+
+        <section class="glass" style="padding: 3rem;">
+            <div class="action-bars">
+                <div style="flex:1;">
+                    <h2 style="font-size:1.5rem; margin-bottom:1rem; color:white;">1. Download Template</h2>
+                    <p style="color:#cbd5e1; margin-bottom:1rem; font-size:0.95rem;">Download the exact JSON structure required for questions. Edit it in a Text Editor or VS Code.</p>
+                    <div style="display: flex; gap: 1rem; align-items: center; justify-content: flex-start;">
+                        <button type="button" onclick="downloadTemplateFile()" class="secondary-btn" style="padding: 0.8rem 1.5rem; display:inline-block; border:none; cursor:pointer;">⬇️ Download questions.json</button>
+                        <button type="button" onclick="copyTemplateJSON()" class="secondary-btn" style="padding: 0.8rem 1.5rem; display:inline-block; border:none; cursor:pointer; background:rgba(255,255,255,0.1);">📋 Copy JSON Text</button>
+                    </div>
+                    
+                    <h3 style="margin-top:1.5rem; font-size:1rem; color:white;">JSON Structure Example:</h3>
+<pre>
+[
+  {
+    "id": "1",
+    "text": "Your question?",
+    "options": {
+      "a": "Option A",
+      "b": "Option B",
+      "c": "Option C",
+      "d": "Option D"
+    },
+    "answer": "a"
+  }
+]
+</pre>
+                </div>
+                
+                <div style="width:1px; background:rgba(255,255,255,0.1); margin: 0 1rem;"></div>
+                
+                <div style="flex:1;">
+                    <h2 style="font-size:1.5rem; margin-bottom:1rem; color:white;">2. Upload New Questions</h2>
+                    <p style="color:#cbd5e1; margin-bottom:1rem; font-size:0.95rem;">After modifying your JSON file, upload it here to replace all questions instantly.</p>
+                    
+                    <form id="uploadForm">
+                        <div class="upload-area" id="dropZone">
+                            <input type="file" id="jsonFile" name="file" accept=".json" class="file-input" required>
+                            <div style="font-size: 2rem; margin-bottom:0.5rem;">{ }</br></div>
+                            <strong style="color:white; display:block; margin-bottom:0.3rem;" id="fileName">Select or Drop JSON File</strong>
+                            <span style="font-size:0.85rem; color:#64748b;">Only .json files allowed</span>
+                        </div>
+                        <button type="submit" id="uploadBtn" class="primary-btn" style="margin-top: 1.5rem;" disabled>Upload & Update Server</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <section class="glass" style="padding: 3rem; margin-top: 2rem; border: 1px solid rgba(239, 68, 68, 0.3); background: linear-gradient(135deg, rgba(239, 68, 68, 0.05), rgba(0,0,0,0.5));">
+            <h2 style="font-size:2rem; margin-bottom:2rem; color:#f87171; text-align: center;">⚡ Rapid Round Settings</h2>
+            <div class="action-bars">
+                <div style="flex:1;">
+                    <h2 style="font-size:1.5rem; margin-bottom:1rem; color:white;">1. Download Rapid Template</h2>
+                    <p style="color:#cbd5e1; margin-bottom:1rem; font-size:0.95rem;">Download the template specifically for the Rapid Round.</p>
+                    <div style="display: flex; gap: 1rem; align-items: center; justify-content: flex-start;">
+                        <button type="button" onclick="downloadRapidTemplateFile()" class="secondary-btn" style="padding: 0.8rem 1.5rem; display:inline-block; border:none; cursor:pointer;">⬇️ Download rapid_questions.json</button>
+                    </div>
+                </div>
+                
+                <div style="width:1px; background:rgba(255,255,255,0.1); margin: 0 1rem;"></div>
+                
+                <div style="flex:1;">
+                    <h2 style="font-size:1.5rem; margin-bottom:1rem; color:white;">2. Upload Rapid Questions</h2>
+                    <p style="color:#cbd5e1; margin-bottom:1rem; font-size:0.95rem;">Upload the questions exclusively for the 2-minute Rapid Round.</p>
+                    
+                    <form id="uploadRapidForm">
+                        <div class="upload-area" id="dropZoneRapid" style="border-color: rgba(239, 68, 68, 0.2);">
+                            <input type="file" id="jsonFileRapid" name="file" accept=".json" class="file-input" required>
+                            <div style="font-size: 2rem; margin-bottom:0.5rem; color:#f87171;">{ }</br></div>
+                            <strong style="color:white; display:block; margin-bottom:0.3rem;" id="fileNameRapid">Select Rapid JSON File</strong>
+                            <span style="font-size:0.85rem; color:#64748b;">Only .json files allowed</span>
+                        </div>
+                        <button type="submit" id="uploadBtnRapid" class="primary-btn" style="margin-top: 1.5rem; background: linear-gradient(135deg, #ef4444, #dc2626);" disabled>Update Rapid Questions</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <div style="text-align:center; margin-top:2rem;">
+            <a href="/" style="color:#94a3b8; text-decoration:none; display:inline-block; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:3px; transition:color 0.2s;">← Back to Main App</a>
+        </div>
+    </div>
+
+    <script>
+        const fileInput = document.getElementById('jsonFile');
+        const fileName = document.getElementById('fileName');
+        const uploadBtn = document.getElementById('uploadBtn');
+        const dropZone = document.getElementById('dropZone');
+        const uploadForm = document.getElementById('uploadForm');
+
+        const fileInputRapid = document.getElementById('jsonFileRapid');
+        const fileNameRapid = document.getElementById('fileNameRapid');
+        const uploadBtnRapid = document.getElementById('uploadBtnRapid');
+        const dropZoneRapid = document.getElementById('dropZoneRapid');
+        const uploadRapidForm = document.getElementById('uploadRapidForm');
+
+        async function downloadTemplateFile() {
+            try {
+                const response = await fetch('/api/download-template');
+                if (!response.ok) throw new Error('Network response was not ok');
+                const blob = await response.blob();
+                
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.style.display = 'none';
+                a.href = url;
+                // Force filename strictly by DOM
+                a.download = 'questions_template.json';
+                
+                document.body.appendChild(a);
+                a.click();
+                
+                window.URL.revokeObjectURL(url);
+                document.body.removeChild(a);
+            } catch (err) {
+                console.error('Download error:', err);
+                alert('Could not download file. Please check console.');
+            }
+        }
+
+        async function copyTemplateJSON() {
+            try {
+                const response = await fetch('/api/download-template');
+                if (!response.ok) throw new Error('Network response was not ok');
+                const text = await response.text();
+                
+                await navigator.clipboard.writeText(text);
+                alert("JSON copied to clipboard! You can paste it directly into your own .json file.");
+            } catch(e) {
+                alert("Could not copy JSON. Error checking connection.");
+            }
+        }
+
+        async function downloadRapidTemplateFile() {
+            try {
+                const response = await fetch('/api/download-rapid-template');
+                if (!response.ok) throw new Error('Network response was not ok');
+                const blob = await response.blob();
+                
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.style.display = 'none';
+                a.href = url;
+                a.download = 'rapid_questions_template.json';
+                
+                document.body.appendChild(a);
+                a.click();
+                
+                window.URL.revokeObjectURL(url);
+                document.body.removeChild(a);
+            } catch (err) {
+                console.error('Download error:', err);
+                alert('Could not download rapid template. Please check console.');
+            }
+        }
+
+        fileInput.addEventListener('change', function() {
+            if(this.files && this.files.length > 0) {
+                const file = this.files[0];
+                if(file.name.endsWith('.json')) {
+                    fileName.textContent = file.name;
+                    fileName.style.color = '#34d399';
+                    dropZone.style.borderColor = '#34d399';
+                    uploadBtn.disabled = false;
+                } else {
+                    fileName.textContent = 'Invalid file! Needs .json';
+                    fileName.style.color = '#f87171';
+                    dropZone.style.borderColor = '#f87171';
+                    uploadBtn.disabled = true;
+                }
+            } else {
+                fileName.textContent = 'Select or Drop JSON File';
+                fileName.style.color = 'white';
+                dropZone.style.borderColor = 'rgba(255,255,255,0.2)';
+                uploadBtn.disabled = true;
+            }
+        });
+
+        fileInputRapid.addEventListener('change', function() {
+            if(this.files && this.files.length > 0) {
+                const file = this.files[0];
+                if(file.name.endsWith('.json')) {
+                    fileNameRapid.textContent = file.name;
+                    fileNameRapid.style.color = '#f87171';
+                    dropZoneRapid.style.borderColor = '#f87171';
+                    uploadBtnRapid.disabled = false;
+                } else {
+                    fileNameRapid.textContent = 'Invalid file! Needs .json';
+                    fileNameRapid.style.color = '#f87171';
+                    dropZoneRapid.style.borderColor = '#f87171';
+                    uploadBtnRapid.disabled = true;
+                }
+            } else {
+                fileNameRapid.textContent = 'Select Rapid JSON File';
+                fileNameRapid.style.color = 'white';
+                dropZoneRapid.style.borderColor = 'rgba(239,68,68,0.2)';
+                uploadBtnRapid.disabled = true;
+            }
+        });
+
+        uploadForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const file = fileInput.files[0];
+            if(!file) return;
+
+            uploadBtn.disabled = true;
+            uploadBtn.textContent = 'Uploading & Validating...';
+
+            const formData = new FormData();
+            formData.append('file', file);
+
+            try {
+                const res = await fetch('/api/upload-questions', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const data = await res.json();
+                if(data.success) {
+                    alert('Success! The test questions have been updated dynamically to use your JSON.');
+                    window.location.href = '/test'; // Redirect them to try the new test
+                } else {
+                    alert('Error: ' + data.message);
+                }
+            } catch(e) {
+                alert('Network error while uploading. Check your connection.');
+            } finally {
+                uploadBtn.disabled = false;
+                uploadBtn.textContent = 'Upload & Update Server';
+            }
+        });
+
+        uploadRapidForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const file = fileInputRapid.files[0];
+            if(!file) return;
+
+            uploadBtnRapid.disabled = true;
+            uploadBtnRapid.textContent = 'Uploading & Validating...';
+
+            const formData = new FormData();
+            formData.append('file', file);
+
+            try {
+                const res = await fetch('/api/upload-rapid-questions', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const data = await res.json();
+                if(data.success) {
+                    alert('Success! The Rapid Round questions have been updated dynamically.');
+                    window.location.href = '/rapid-test'; // Redirect them to try the new rapid test
+                } else {
+                    alert('Error: ' + data.message);
+                }
+            } catch(e) {
+                alert('Network error while uploading. Check your connection.');
+            } finally {
+                uploadBtnRapid.disabled = false;
+                uploadBtnRapid.textContent = 'Update Rapid Questions';
+            }
+        });
+    </script>
+</body>
+</html>

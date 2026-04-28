@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Take Test - Prince Learning Hub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        .test-container {
+            max-width: 800px;
+            margin: 0 auto;
+            margin-bottom: 4rem;
+        }
+        .timer-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 2.5rem;
+            margin-bottom: 2rem;
+            border: 2px solid rgba(239, 68, 68, 0.4); 
+            background: rgba(15, 23, 42, 0.85);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            border-radius: 1rem;
+        }
+        .timer-text {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #fca5a5;
+            font-variant-numeric: tabular-nums;
+            letter-spacing: 2px;
+        }
+        
+        #nameModal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-content {
+            width: 100%;
+            max-width: 500px;
+            text-align: center;
+        }
+        
+        .pulse-timer {
+            animation: pulse-red 1.5s infinite;
+        }
+        @keyframes pulse-red {
+            0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 4px;
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #3b82f6, #10b981);
+            width: 0%;
+            transition: width 0.4s ease;
+        }
+        
+        .options-group-vertical {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        
+        .option-label-block {
+            display: flex;
+            align-items: center;
+            padding: 1.2rem 1.5rem;
+            background: rgba(255,255,255,0.05);
+            border: 2px solid rgba(255,255,255,0.1);
+            border-radius: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: left;
+            font-size: 1.1rem;
+            color: #cbd5e1;
+            margin: 0;
+        }
+        
+        .option-label-block:hover {
+            background: rgba(255,255,255,0.1);
+            border-color: rgba(59, 130, 246, 0.5);
+        }
+        
+        .option-label-block.selected {
+            background: rgba(59, 130, 246, 0.15);
+            border-color: #3b82f6;
+            color: white;
+            font-weight: 500;
+        }
+
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+            gap: 1.5rem;
+        }
+        
+        .nav-btn {
+            flex: 1;
+            padding: 1.2rem;
+            border-radius: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+        
+        .prev-btn {
+            background: rgba(255,255,255,0.05);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        .prev-btn:hover:not(:disabled) {
+            background: rgba(255,255,255,0.1);
+        }
+        
+        .next-btn {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+        }
+        
+        .next-btn:hover:not(:disabled) {
+            background: #2563eb;
+            transform: translateY(-2px);
+        }
+        
+        .nav-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .submit-test-btn {
+            background: linear-gradient(135deg, #10b981, #059669);
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+            border: none;
+            color: white;
+        }
+        
+        .submit-test-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+        }
+
+    </style>
+    <!-- Include html2canvas for capturing DOM -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <!-- Include jsPDF for PDF generation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+    <!-- Modal for Name Prompt -->
+    <div id="nameModal">
+        <div class="glass modal-content">
+            <h2 style="font-size:2rem; margin-bottom:1rem;">Candidate Details</h2>
+            <p style="color:#cbd5e1; margin-bottom:2rem; font-size:1.1rem; line-height:1.5;">The assessment will start immediately after you begin. You have <strong>20 minutes</strong> to complete <strong>20 questions</strong>.</p>
+            <form id="startTestForm">
+                <input type="text" id="studentName" placeholder="plzz enter your name" required autocomplete="off" style="width:100%; padding: 1.2rem; border-radius:0.75rem; border:1px solid rgba(255,255,255,0.2); background:rgba(0,0,0,0.4); color:white; margin-bottom:1.5rem; font-family:inherit; font-size:1.2rem;">
+                <button type="submit" class="primary-btn" style="padding:1.2rem; font-size:1.2rem;">Start Assessment Now</button>
+                <a href="/" style="display:block; margin-top:1.5rem; color:#94a3b8; text-decoration:none;">Cancel & Return Home</a>
+            </form>
+        </div>
+    </div>
+
+    <!-- Scorecard/Report Modal (Hidden initially) -->
+    <div id="scorecardModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.95); z-index:2000; align-items:center; justify-content:center; backdrop-filter: blur(10px);">
+        <div style="text-align:center;">
+            
+            <!-- Wrapping the card in a fixed-size container for perfect PDF exporting -->
+            <div id="reportCard" class="glass" style="width: 500px; padding: 3rem; border-radius: 1.5rem; position: relative; background: linear-gradient(135deg, #0f172a, #1e293b); margin-bottom: 2rem; border: 1px solid rgba(59,130,246,0.3); text-align: center;">
+                <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo" style="height:70px; margin-bottom:1rem;">
+                <h2 style="font-size: 2rem; margin-bottom: 0.5rem; color: #f8fafc; font-weight: 700; text-shadow: 0 2px 4px rgba(0,0,0,0.3);">Prince Learning Hub</h2>
+                <p style="color: #64748b; font-size: 1rem;">Official Assessment Report</p>
+                
+                <div style="background: rgba(255,255,255,0.03); border-radius: 1rem; border: 1px solid rgba(255,255,255,0.05); padding: 2rem; margin-top: 2rem;">
+                    <p style="color: #94a3b8; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.5rem;">Candidate Name</p>
+                    <h3 id="rcName" style="font-size: 1.8rem; color: white; margin-bottom: 2rem; font-weight: 600;">Full Name</h3>
+                    
+                    <p style="color: #94a3b8; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.5rem;">Final Score</p>
+                    <div style="font-size: 4rem; font-weight: 700; color: #34d399; text-shadow: 0 0 20px rgba(52,211,153,0.3); font-variant-numeric: tabular-nums;">
+                        <span id="rcScore">0</span><span style="font-size:2rem; color:#64748b;">/20</span>
+                    </div>
+                </div>
+                
+                <div style="background: rgba(59, 130, 246, 0.05); border-radius: 1rem; border: 1px solid rgba(59, 130, 246, 0.2); padding: 1.5rem; margin-top: 1.5rem; text-align: left;">
+                    <p style="color: #60a5fa; font-size: 0.9rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.5rem;">✨ AI Performance Analysis</p>
+                    <p id="rcFeedback" style="color: #cbd5e1; font-size: 0.95rem; line-height: 1.5; margin: 0;">Analyzing performance...</p>
+                </div>
+                
+                <p style="color: rgba(255,255,255,0.2); font-size:0.8rem; margin-top:2rem; letter-spacing: 1px;">Document generated at completion of standard assessment</p>
+            </div>
+            
+            <div style="display: flex; justify-content: center; gap: 1rem;">
+                <button onclick="downloadReport()" class="primary-btn" id="dlBtn" style="width:auto; padding: 1rem 2rem; border-radius: 2rem;"><span style="margin-right:8px;">⬇️</span> Download PDF Report</button>
+                <button onclick="window.location.href='/leaderboard'" class="secondary-btn" style="width:auto; padding: 1rem 2rem; border-radius: 2rem;">View Leaderboard →</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Test Container -->
+    <div class="app-container test-container" style="display:none;" id="mainTestContent">
+        <header style="text-align:center; margin-bottom: 2rem;">
+            <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo" style="height:50px; margin-bottom:1rem;">
+            <h1>Prince Learning Hub</h1>
+            <p style="color:#94a3b8;">Assessment in Progress</p>
+        </header>
+
+        <div class="timer-bar" id="timerBar">
+            <div>
+                <strong style="font-size:1.2rem; color:white;">Time Remaining</strong>
+            </div>
+            <div class="timer-text" id="timerDisplay">20:00</div>
+        </div>
+
+        <div id="questionsWrapper">
+            <div style="text-align:center; padding: 3rem; color:#94a3b8; font-size:1.2rem;">Loading questions from server...</div>
+        </div>
+    </div>
+
+    <script>
+        let studentName = '';
+        let timerInterval;
+        let timeLeft = 20 * 60; // 20 minutes
+        let allQuestions = [];
+        let currentQuestionIndex = 0;
+        let userAnswers = {}; 
+
+        const nameModal = document.getElementById('nameModal');
+        const startTestForm = document.getElementById('startTestForm');
+        const mainTestContent = document.getElementById('mainTestContent');
+        const timerDisplay = document.getElementById('timerDisplay');
+        const timerBar = document.getElementById('timerBar');
+        const questionsWrapper = document.getElementById('questionsWrapper');
+        const scorecardModal = document.getElementById('scorecardModal');
+
+        startTestForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            studentName = document.getElementById('studentName').value.trim();
+            if(studentName) {
+                nameModal.style.display = 'none';
+                mainTestContent.style.display = 'block';
+                loadQuestions();
+                startTimer();
+                window.scrollTo(0, 0);
+            }
+        });
+
+        async function loadQuestions() {
+            try {
+                const res = await fetch('/api/questions');
+                allQuestions = await res.json();
+                renderCurrentQuestion();
+            } catch(e) {
+                questionsWrapper.innerHTML = '<p style="color:#f87171; text-align:center;">Failed to load questions. Please refresh the page.</p>';
+            }
+        }
+
+        function renderCurrentQuestion() {
+            if(!allQuestions || allQuestions.length === 0) return;
+            
+            const q = allQuestions[currentQuestionIndex];
+            const progress = ((currentQuestionIndex + 1) / allQuestions.length) * 100;
+            
+            let optionsHtml = '';
+            for(const [key, val] of Object.entries(q.options)) {
+                const isChecked = userAnswers[q.id] === key;
+                optionsHtml += `
+                    <label class="option-label-block ${isChecked ? 'selected' : ''}" onclick="selectOption('${q.id}', '${key}')">
+                        <input type="radio" name="${q.id}" value="${key}" ${isChecked ? 'checked' : ''} style="margin-right: 15px; transform: scale(1.3); cursor:pointer;">
+                        ${val}
+                    </label>
+                `;
+            }
+
+            const isFirst = (currentQuestionIndex === 0);
+            const isLast = (currentQuestionIndex === allQuestions.length - 1);
+
+            let buttonsHtml = `
+                <div class="nav-buttons">
+                    <button type="button" class="nav-btn prev-btn" ${isFirst ? 'disabled' : ''} onclick="prevQuestion()">Previous</button>
+                    ${isLast ? 
+                        `<button type="button" class="nav-btn submit-test-btn" id="finalSubmitBtn" onclick="window.confirmSubmit()">Submit Final Test</button>` : 
+                        `<button type="button" class="nav-btn next-btn" onclick="nextQuestion()">Next Question</button>`
+                    }
+                </div>
+            `;
+
+            questionsWrapper.innerHTML = `
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: ${progress}%"></div>
+                </div>
+                
+                <div class="glass" style="padding: 2.5rem;">
+                    <p style="color:#94a3b8; font-size:0.95rem; margin-bottom:1rem; text-transform:uppercase; letter-spacing:1px; font-weight:600;">Question ${currentQuestionIndex + 1} of ${allQuestions.length}</p>
+                    <p style="font-size:1.5rem; font-weight:600; line-height:1.5; color:white;">${q.text}</p>
+                    
+                    <div class="options-group-vertical">
+                        ${optionsHtml}
+                    </div>
+                </div>
+                
+                ${buttonsHtml}
+            `;
+        }
+
+        window.selectOption = function(qid, key) {
+            userAnswers[qid] = key;
+            renderCurrentQuestion(); 
+        }
+
+        window.nextQuestion = function() {
+            if(currentQuestionIndex < allQuestions.length - 1) {
+                currentQuestionIndex++;
+                renderCurrentQuestion();
+                window.scrollTo(0, 0);
+            }
+        }
+
+        window.prevQuestion = function() {
+            if(currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                renderCurrentQuestion();
+                window.scrollTo(0, 0);
+            }
+        }
+
+        function startTimer() {
+            updateTimerDisplay();
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                updateTimerDisplay();
+                
+                if(timeLeft === 300) { 
+                    timerBar.classList.add('pulse-timer');
+                }
+                
+                if(timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    autoSubmitTest();
+                }
+            }, 1000);
+        }
+
+        function updateTimerDisplay() {
+            const m = Math.floor(timeLeft / 60).toString().padStart(2, '0');
+            const s = (timeLeft % 60).toString().padStart(2, '0');
+            timerDisplay.textContent = `${m}:${s}`;
+        }
+
+        window.confirmSubmit = function() {
+            submitTest();
+        }
+
+        function autoSubmitTest() {
+            alert("Time is up! Your test is being automatically submitted.");
+            submitTest();
+        }
+
+        async function submitTest() {
+            clearInterval(timerInterval);
+            
+            const submitBtn = document.getElementById('finalSubmitBtn');
+            if(submitBtn) {
+                submitBtn.disabled = true;
+                submitBtn.textContent = "Calculating...";
+            }
+
+            try {
+                const res = await fetch('/api/submit-test', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ name: studentName, answers: userAnswers })
+                });
+                
+                if(!res.ok) throw new Error("Server error");
+                
+                const data = await res.json();
+                if(data.success) {
+                    // Show Report Card
+                    document.getElementById('rcName').innerText = studentName;
+                    document.getElementById('rcScore').innerText = data.score;
+                    document.getElementById('rcFeedback').innerHTML = data.feedback || "Good effort! Keep practicing.";
+                    scorecardModal.style.display = 'flex';
+                } else {
+                    alert("Submission failed: " + data.message);
+                    if(submitBtn) {
+                        submitBtn.disabled = false;
+                        submitBtn.textContent = "Submit Final Test";
+                    }
+                }
+            } catch(e) {
+                console.error("Submit error:", e);
+                alert("Error submitting test. Check connection.");
+                if(submitBtn) {
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = "Submit Final Test";
+                }
+            }
+        }
+
+        window.downloadReport = function() {
+            const dlBtn = document.getElementById('dlBtn');
+            dlBtn.textContent = "Generating PDF...";
+            
+            const reportElem = document.getElementById('reportCard');
+            html2canvas(reportElem, { backgroundColor: '#0f172a', scale: 2, useCORS: true }).then(canvas => {
+                // Compress image to JPEG to avoid huge 4MB file sizes
+                const imgData = canvas.toDataURL('image/jpeg', 0.8);
+                const { jsPDF } = window.jspdf;
+                
+                const dummyPdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+                const pdfWidth = dummyPdf.internal.pageSize.getWidth();
+                const margin = 15; 
+                const imgWidth = pdfWidth - (margin * 2);
+                
+                const imgProps = dummyPdf.getImageProperties(imgData);
+                const imgHeight = (imgProps.height * imgWidth) / imgProps.width;
+                
+                const requiredHeight = imgHeight + 40;
+                
+                const pdf = new jsPDF({
+                    orientation: 'portrait',
+                    unit: 'mm',
+                    format: [pdfWidth, Math.max(297, requiredHeight)]
+                });
+                
+                pdf.addImage(imgData, 'JPEG', margin, 20, imgWidth, imgHeight);
+                
+                // Construct safe filename
+                const safeName = studentName ? studentName.replace(/\s+/g, '_') : 'Student';
+                const filename = `Scorecard_PrinceHub_${safeName}.pdf`;
+
+                // Force download using Blob to ensure correct extension
+                const pdfBlob = pdf.output('blob');
+                const blobUrl = URL.createObjectURL(pdfBlob);
+                const link = document.createElement('a');
+                link.href = blobUrl;
+                link.download = filename;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                
+                dlBtn.innerHTML = '<span style="margin-right:8px;">✅</span> PDF Saved!';
+                setTimeout(() => { dlBtn.innerHTML = '<span style="margin-right:8px;">⬇️</span> Download PDF Report'; }, 3000);
+            }).catch(err => {
+                console.error("Canvas to PDF error:", err);
+                alert("Could not generate PDF. Certain browser security configs might interfere.");
+                dlBtn.innerHTML = '<span style="margin-right:8px;">⬇️</span> Download PDF Report';
+            });
+        }
+    </script>
+</body>
+</html>
